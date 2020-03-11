@@ -4,24 +4,36 @@ Bindings to [rusqlite](https://github.com/jgallagher/rusqlite) for [deno](https:
 
 ## Stability
 
-**UNSTABLE**
+**UNSTABLE** :rotating_light:
 
-This plugin will panic if anything goes slightly wrong.
+This plugin **will panic** if anything goes slightly wrong.
 Probably don't use it in production just yet.
 
 ## Usage
 
-See [interface.js](./tests/interface.js).
+Install Rust (I recommend [rustup](https://rustup.rs/)) and [deno](https://deno.land/#install).
+
+Build and run:
 
 ```bash
-# install rust and deno
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-curl -fsSL https://deno.land/x/install/install.sh | sh
-
-# build and run
 cargo build --release
 deno --allow-plugin --allow-read=. tests/interface.js release
 ```
+
+See [interface.js](./tests/interface.js) for the full example.
+
+## When would I use this?
+
+Use this plugin whenever you would embed an SQLite database into any other program.
+It's essentially just a wrapper around (another wrapper around) the actual SQLite C code.
+
+[deno-sqlite](https://github.com/dyedgreen/deno-sqlite), which is awesome, works in browsers; this plugin _does not_.
+This plugin _does_ allow you to work with SQLite databases from the filesystem with all the durability and performance SQLite provides.
+Wasm-based SQLite ports require you to load the entire database file into memory, operate on it, then save the whole thing back to disk again.
+
+SQLite is [_very good_](https://sqlite.org/testing.html).
+You might not always need a remote database like MySQL or Postgres.
+But if you do, check out [deno_mysql](https://github.com/manyuanrong/deno_mysql) or [deno-postgres](https://github.com/buildondata/deno-postgres).
 
 ## How does it work?
 
