@@ -13,6 +13,15 @@ Probably don't use it in production just yet.
 
 See [interface.js](./tests/interface.js).
 
+## How does it work?
+
+Query parameters are encoded to JSON text and sent from deno's JS runtime to the plugin.
+The plugin decodes the JSON then performs the query against SQLite using rusqlite.
+It then re-encodes the result as JSON and sends it back to JS-land.
+
+SQLite's [BLOB type](https://www.sqlite.org/datatype3.html) is encoded using base64 for transmission via JSON and exposed in the deno interface as an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
+(It might be nice to use a binary serialisation format like CBOR instead of JSON to avoid the base64 encode/decode on either side.)
+
 ## License
 
 SQLite is [public domain](https://sqlite.org/copyright.html).
