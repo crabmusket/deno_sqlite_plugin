@@ -1,4 +1,4 @@
-# deno_sqlite_plugin
+# deno_sqlite_plugin :seedling:
 
 Bindings to [rusqlite](https://github.com/jgallagher/rusqlite) for [deno](https://deno.land).
 
