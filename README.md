@@ -28,4 +28,6 @@ SQLite is [public domain](https://sqlite.org/copyright.html).
 
 rusqlite is [MIT](https://github.com/jgallagher/rusqlite/blob/master/LICENSE).
 
+[Buffer to base64](./src/bufferToBase64.js) implementation is [MIT](https://gist.githubusercontent.com/jonleighton/958841/raw/fb05a8632efb75d85d43deb593df04367ce48371/base64ArrayBuffer.js).
+
 This package is [MIT](./LICENSE).
