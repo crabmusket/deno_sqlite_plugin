@@ -13,6 +13,16 @@ Probably don't use it in production just yet.
 
 See [interface.js](./tests/interface.js).
 
+```bash
+# install rust and deno
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl -fsSL https://deno.land/x/install/install.sh | sh
+
+# build and run
+cargo build --release
+deno --allow-plugin --allow-read=. tests/interface.js release
+```
+
 ## How does it work?
 
 Query parameters are encoded to JSON text and sent from deno's JS runtime to the plugin.
