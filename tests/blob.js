@@ -1,6 +1,6 @@
 import { init } from "../src/mod.ts";
 
-const filenameBase = "deno_sqlite_native";
+const filenameBase = "deno_sqlite_plugin";
 
 let filenameSuffix = ".so";
 let filenamePrefix = "lib";
