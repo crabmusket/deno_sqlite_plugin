@@ -13,7 +13,8 @@ if (Deno.build.os === "mac") {
   filenameSuffix = ".dylib";
 }
 
-const filename = `./target/${Deno.args[0] || "debug"}/${filenamePrefix}${filenameBase}${filenameSuffix}`;
+const filename = `./target/${Deno.args[0] ||
+  "debug"}/${filenamePrefix}${filenameBase}${filenameSuffix}`;
 
 let sqlite = await init(filename);
 
@@ -24,8 +25,11 @@ await connection.execute(`CREATE TABLE IF NOT EXISTS binaries (
   data            BLOB
 )`);
 
-let rowsAffected = await connection.execute(`INSERT INTO binaries (name, data) VALUES (?, ?)`, ["winrar.exe", new Uint32Array(6).fill(8).buffer]);
-console.log('inserted binary,', rowsAffected, 'rows affected');
+let rowsAffected = await connection.execute(
+  `INSERT INTO binaries (name, data) VALUES (?, ?)`,
+  ["winrar.exe", new Uint32Array(6).fill(8).buffer]
+);
+console.log("inserted binary,", rowsAffected, "rows affected");
 
 let result = await connection.query(`SELECT * FROM binaries`, []);
 console.log("raw result", result);

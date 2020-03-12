@@ -11,16 +11,18 @@ if (Deno.build.os === "mac") {
   filenameSuffix = ".dylib";
 }
 
-const filename = `./target/${Deno.args[0]}/${filenamePrefix}${filenameBase}${filenameSuffix}`;
+const filename = `./target/${Deno.args
+  [0]}/${filenamePrefix}${filenameBase}${filenameSuffix}`;
 
 const plugin = Deno.openPlugin(filename);
 
 let response = plugin.ops.openConnection.dispatch(
   new TextEncoder().encode(JSON.stringify({
-    path: ":memory:",
+    path: ":memory:"
   }))
 );
-let connId = JSON.parse(new TextDecoder().decode(response)).result.connection_id;
+let connId =
+  JSON.parse(new TextDecoder().decode(response)).result.connection_id;
 
 const createPersonTable = `CREATE TABLE IF NOT EXISTS person (
   id              INTEGER PRIMARY KEY,
@@ -28,20 +30,24 @@ const createPersonTable = `CREATE TABLE IF NOT EXISTS person (
   time_created    TEXT NOT NULL
 )`;
 
-response = plugin.ops.execute.dispatch(new TextEncoder().encode(JSON.stringify({
-  connection_id: connId,
-  statement: createPersonTable,
-  params: [],
-})));
+response = plugin.ops.execute.dispatch(
+  new TextEncoder().encode(JSON.stringify({
+    connection_id: connId,
+    statement: createPersonTable,
+    params: []
+  }))
+);
 console.log(`execute response: ${new TextDecoder().decode(response)}`);
 
 const insertPerson = `INSERT INTO person (name, time_created) VALUES (?, ?)`;
 
-response = plugin.ops.execute.dispatch(new TextEncoder().encode(JSON.stringify({
-  connection_id: connId,
-  statement: insertPerson,
-  params: ["stuart", new Date().toISOString()],
-})));
+response = plugin.ops.execute.dispatch(
+  new TextEncoder().encode(JSON.stringify({
+    connection_id: connId,
+    statement: insertPerson,
+    params: ["stuart", new Date().toISOString()]
+  }))
+);
 console.log(`execute response: ${new TextDecoder().decode(response)}`);
 
 const queryPeopleByName = `SELECT * FROM person WHERE name = ?`;
@@ -49,7 +55,7 @@ const queryPeopleByName = `SELECT * FROM person WHERE name = ?`;
 response = plugin.ops.query.dispatch(new TextEncoder().encode(JSON.stringify({
   connection_id: connId,
   statement: queryPeopleByName,
-  params: ["stuart"],
+  params: ["stuart"]
 })));
 console.log(`query response: ${new TextDecoder().decode(response)}`);
 

@@ -18,13 +18,15 @@ export class Sqlite {
   async connect(path: string): Promise<Connection> {
     let response = jsonSyncOp<OpenConnectionRequest, OpenConnectionResponse>(
       this._plugin.ops.openConnection,
-      {path}
+      { path }
     );
     if (response.error) {
       throw new Error("[ops.openConnection] error: " + response.error);
     }
     if (!response.result) {
-      throw new Error("[ops.openConnection] missing result with path: " + path);
+      throw new Error(
+        "[ops.openConnection] missing result with path: " + path
+      );
     }
     return new Connection(this._plugin, path, response.result.connection_id);
   }
@@ -55,7 +57,7 @@ export class Connection {
       {
         connection_id: this._connection_id,
         statement,
-        params: encodeBlobs(params),
+        params: encodeBlobs(params)
       }
     );
     if (response.error) {
@@ -70,7 +72,7 @@ export class Connection {
       {
         connection_id: this._connection_id,
         statement,
-        params: encodeBlobs(params),
+        params: encodeBlobs(params)
       }
     );
     if (response.error) {
@@ -83,10 +85,10 @@ export class Connection {
 function encodeBlobs(params: Values): EncodedValues {
   return params.map(param => {
     if (param instanceof ArrayBuffer) {
-      return ['blob:base64', bufferToBase64(param)];
+      return ["blob:base64", bufferToBase64(param)];
     }
     return param;
-  })
+  });
 }
 
 function decodeBlobs(rows: EncodedValues[]): Values[] {
@@ -94,9 +96,10 @@ function decodeBlobs(rows: EncodedValues[]): Values[] {
 
   function convertBlobs(col: EncodedValue): Value {
     if (col instanceof Array) {
-      if (col.length === 2
-        && col[0] === 'blob:base64'
-        && typeof col[1] === 'string') {
+      if (col.length === 2 &&
+        col[0] === "blob:base64" &&
+        typeof col[1] === "string")
+      {
         return base64ToBuffer(col[1]);
       } else {
         throw new Error(

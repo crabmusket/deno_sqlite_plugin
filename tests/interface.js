@@ -13,7 +13,8 @@ if (Deno.build.os === "mac") {
   filenameSuffix = ".dylib";
 }
 
-const filename = `./target/${Deno.args[0] || "debug"}/${filenamePrefix}${filenameBase}${filenameSuffix}`;
+const filename = `./target/${Deno.args[0] ||
+  "debug"}/${filenamePrefix}${filenameBase}${filenameSuffix}`;
 
 let sqlite = await init(filename);
 
@@ -25,7 +26,12 @@ await connection.execute(`CREATE TABLE IF NOT EXISTS person (
   time_created    TEXT NOT NULL
 )`);
 
-let rowsAffected = await connection.execute(`INSERT INTO person (name, height, time_created) VALUES (?, ?, ?)`, ["stuart", 12.4, new Date().toISOString()]);
-console.log('inserted person,', rowsAffected, 'rows affected');
+let rowsAffected = await connection.execute(
+  `INSERT INTO person (name, height, time_created) VALUES (?, ?, ?)`,
+  ["stuart", 12.4, new Date().toISOString()]
+);
+console.log("inserted person,", rowsAffected, "rows affected");
 
-console.log(await connection.query(`SELECT * FROM person WHERE name = ?`, ["stuart"]));
+console.log(
+  await connection.query(`SELECT * FROM person WHERE name = ?`, ["stuart"])
+);
