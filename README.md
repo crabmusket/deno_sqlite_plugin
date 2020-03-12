@@ -92,7 +92,7 @@ SQLite's [BLOB type](https://www.sqlite.org/datatype3.html) is encoded using bas
 ## TODO
 
 - [ ] Please don't look at any of my code, it's awful
-- [ ] Make JS-side interface slightly nicer? Remove `init`
+- [x] Make JS-side interface slightly nicer? Remove `init`
 - [ ] Remove all uses of `unwrap()` in Rust; pass errors to JS gracefully
 - [ ] Test performance of JSON serialisation for ops and investigate CBOR
 - [ ] Implement more [connection methods](https://docs.rs/rusqlite/0.21.0/rusqlite/struct.Connection.html)?
