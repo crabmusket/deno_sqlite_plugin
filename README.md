@@ -15,16 +15,46 @@ This plugin is tested against deno v0.35.0 🦕
 
 ## Usage
 
-Install Rust (I recommend [rustup](https://rustup.rs/)) and [deno](https://deno.land/#install).
+First, download the compiled plugin (~10MB).
+If you're not using Linux, you will have to compile from source for now (see below).
 
-Build and run:
+```bash
+wget https://github.com/crabmusket/deno_sqlite_plugin/releases/download/v0.1/libdeno_sqlite_plugin.so
+```
+
+Now copy this to `sqlite.ts`:
+
+```ts
+import * as sqlitePlugin from "https://raw.githubusercontent.com/crabmusket/deno_sqlite_plugin/v0.1/src/mod.ts";
+
+const sqlite = await sqlitePlugin.init("./libdeno_sqlite_plugin.so");
+const db = await sqlite.connect("./db.sqlite3");
+await db.execute("CREATE TABLE IF NOT EXISTS names (name TEXT)");
+await db.execute("INSERT INTO names (name) VALUES (?)", ["ryan dahl"]);
+console.log(
+  await db.query("SELECT name FROM names", [])
+)
+```
+
+And then run the script:
+
+```bash
+$ deno --allow-plugin sqlite.ts
+[ [ "ryan dahl" ] ]
+```
+
+See [interface.js](./tests/interface.js) for more.
+
+## Build from source
+
+Install Rust (I recommend [rustup](https://rustup.rs/)) and [deno](https://deno.land/#install) and build with Cargo:
 
 ```bash
 cargo build --release
-deno --allow-plugin --allow-read=. tests/interface.js release
 ```
 
-See [interface.js](./tests/interface.js) for the full example.
+This will take some time (30-40 minutes on a laptop) because it compiles all of V8.
+A release build will use a few hundred MB of disk space, and a debug build may use up to 2GB.
 
 ## When would I use this?
 
