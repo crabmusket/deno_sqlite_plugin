@@ -33,7 +33,7 @@ await db.execute("CREATE TABLE IF NOT EXISTS names (name TEXT)");
 await db.execute("INSERT INTO names (name) VALUES (?)", ["ryan dahl"]);
 console.log(
   await db.query("SELECT name FROM names", [])
-)
+);
 ```
 
 And then run the script:
