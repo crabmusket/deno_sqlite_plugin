@@ -41,7 +41,7 @@ export class Connection {
   _original_path: string;
   _connection_id: number;
 
-  constructor(plugin, path, id) {
+  constructor(plugin: Deno.Plugin, path: string, id: number) {
     this._plugin = plugin;
     this._original_path = path;
     this._connection_id = id;
@@ -148,6 +148,9 @@ type QueryResponse = {
 function jsonSyncOp<Req, Res>(op: Deno.PluginOp, request: Req): Res {
   let encodedRequest = encoder.encode(JSON.stringify(request));
   let rawResponse = op.dispatch(encodedRequest);
+  if (!rawResponse) {
+    throw new Error("plugin op returned null");
+  }
   let responseObject = JSON.parse(decoder.decode(rawResponse)) as Res;
   return responseObject;
 }
