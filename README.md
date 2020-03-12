@@ -78,6 +78,14 @@ It then re-encodes the result as JSON and sends it back to JS-land.
 SQLite's [BLOB type](https://www.sqlite.org/datatype3.html) is encoded using base64 for transmission via JSON and exposed in the deno interface as an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
 (It might be nice to use a binary serialisation format like CBOR instead of JSON to avoid the base64 encode/decode on either side.)
 
+## TODO
+
+- [ ] Please don't look at any of my code, it's awful
+- [ ] Make JS-side interface slightly nicer? Remove `init`
+- [ ] Remove all uses of `unwrap()` in Rust; pass errors to JS gracefully
+- [ ] Test performance of JSON serialisation for ops and investigate CBOR
+- [ ] Implement more [connection methods](https://docs.rs/rusqlite/0.21.0/rusqlite/struct.Connection.html)?
+
 ## Licenses
 
 * SQLite is [public domain](https://sqlite.org/copyright.html)
