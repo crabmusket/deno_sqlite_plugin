@@ -3,11 +3,6 @@ import { bufferToBase64 } from "./bufferToBase64.js";
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
-export async function init(filename: string): Promise<Sqlite> {
-  let plugin = Deno.openPlugin(filename);
-  return new Sqlite(plugin);
-}
-
 export class Sqlite {
   _plugin: Deno.Plugin;
 

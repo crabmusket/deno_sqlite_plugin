@@ -1,4 +1,4 @@
-import { init } from "../src/mod.ts";
+import { Sqlite } from "../src/mod.ts";
 
 const filenameBase = "deno_sqlite_plugin";
 
@@ -16,7 +16,7 @@ if (Deno.build.os === "mac") {
 const filename = `./target/${Deno.args[0] ||
   "debug"}/${filenamePrefix}${filenameBase}${filenameSuffix}`;
 
-let sqlite = await init(filename);
+let sqlite = new Sqlite(Deno.openPlugin(filename));
 
 let connection = await sqlite.connect(":memory:");
 await connection.execute(`CREATE TABLE IF NOT EXISTS person (

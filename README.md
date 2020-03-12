@@ -19,15 +19,15 @@ First, download the compiled plugin (~10MB).
 If you're not using Linux, you will have to compile from source for now (see below).
 
 ```bash
-wget https://github.com/crabmusket/deno_sqlite_plugin/releases/download/v0.1/libdeno_sqlite_plugin.so
+wget https://github.com/crabmusket/deno_sqlite_plugin/releases/download/v0.2/libdeno_sqlite_plugin.so
 ```
 
 Now copy this to `sqlite.ts`:
 
 ```ts
-import * as sqlitePlugin from "https://raw.githubusercontent.com/crabmusket/deno_sqlite_plugin/v0.1/src/mod.ts";
+import { Sqlite } from "https://raw.githubusercontent.com/crabmusket/deno_sqlite_plugin/v0.2/src/mod.ts";
 
-const sqlite = await sqlitePlugin.init("./libdeno_sqlite_plugin.so");
+const sqlite = new Sqlite(Deno.openPlugin("./libdeno_sqlite_plugin.so"));
 const db = await sqlite.connect("./db.sqlite3");
 await db.execute("CREATE TABLE IF NOT EXISTS names (name TEXT)");
 await db.execute("INSERT INTO names (name) VALUES (?)", ["ryan dahl"]);
@@ -43,7 +43,18 @@ $ deno --allow-plugin sqlite.ts
 [ [ "ryan dahl" ] ]
 ```
 
-See [interface.js](./tests/interface.js) for more.
+## Auto-download plugin
+
+You can also import `prepared.ts` to fetch the plugin transparently using [plugin_prepare](https://github.com/manyuanrong/deno-plugin-prepare).
+Replace the top lines of the example above with:
+
+```ts
+import { Sqlite, sqlitePlugin } from "https://raw.githubusercontent.com/crabmusket/deno_sqlite_plugin/v0.2/src/prepared.ts";
+
+const sqlite = new Sqlite(sqlitePlugin);
+```
+
+This may be more ergonomic if you want to use Sqlite in a library that others will depend on.
 
 ## Build from source
 
