@@ -30,11 +30,13 @@ export class Sqlite {
   }
 }
 
-export type Params = Array<null | number | string | Blob>;
+export type Value = null | number | string | Blob;
 export type Blob = ArrayBuffer;
+export type Values = Array<Value>;
 
-export type EncodedParams = Array<null | number | string | EncodedBlob>;
-export type EncodedBlob = ['blob:base64', string];
+type EncodedValue = null | number | string | EncodedBlob;
+type EncodedBlob = ["blob:base64", string];
+type EncodedValues = Array<EncodedValue>;
 
 export class Connection {
   _plugin: Deno.Plugin;
@@ -47,7 +49,7 @@ export class Connection {
     this._connection_id = id;
   }
 
-  async execute(statement: string, params: Params = []): Promise<number> {
+  async execute(statement: string, params: Values = []): Promise<number> {
     let response = jsonSyncOp<ExecuteRequest, ExecuteResponse>(
       this._plugin.ops.execute,
       {
@@ -62,7 +64,7 @@ export class Connection {
     return response.rows_affected;
   }
 
-  async query(statement: string, params: Params = []): Promise<any> {
+  async query(statement: string, params: Values = []): Promise<Values[]> {
     let response = jsonSyncOp<QueryRequest, QueryResponse>(
       this._plugin.ops.query,
       {
@@ -78,7 +80,7 @@ export class Connection {
   }
 }
 
-function encodeBlobs(params: Params): EncodedParams {
+function encodeBlobs(params: Values): EncodedValues {
   return params.map(param => {
     if (param instanceof ArrayBuffer) {
       return ['blob:base64', bufferToBase64(param)];
@@ -87,24 +89,23 @@ function encodeBlobs(params: Params): EncodedParams {
   })
 }
 
-function decodeBlobs(result: any[][]): any[][] {
-  for (let row of result) {
-    for (let i in row) {
-      let col = row[i];
-      if (col instanceof Array) {
-        if (col.length === 2
-          && col[0] === 'blob:base64'
-          && typeof col[1] === 'string') {
-          row[i] = base64ToBuffer(col[1]);
-        } else {
-          throw new Error(
-            "bad response from plugin; array which is not a blob"
-          );
-        }
+function decodeBlobs(rows: EncodedValues[]): Values[] {
+  return rows.map(row => row.map(convertBlobs));
+
+  function convertBlobs(col: EncodedValue): Value {
+    if (col instanceof Array) {
+      if (col.length === 2
+        && col[0] === 'blob:base64'
+        && typeof col[1] === 'string') {
+        return base64ToBuffer(col[1]);
+      } else {
+        throw new Error(
+          "bad response from plugin; array which is not a blob"
+        );
       }
     }
+    return col;
   }
-  return result;
 }
 
 function base64ToBuffer(data: string): ArrayBuffer {
@@ -126,7 +127,7 @@ type OpenConnectionResponse = {
 type ExecuteRequest = {
   connection_id: number;
   statement: string;
-  params: EncodedParams;
+  params: EncodedValues;
 };
 
 type ExecuteResponse = {
@@ -137,12 +138,12 @@ type ExecuteResponse = {
 type QueryRequest = {
   connection_id: number;
   statement: string;
-  params: EncodedParams;
+  params: EncodedValues;
 };
 
 type QueryResponse = {
   error: string;
-  result: any[][];
+  result: EncodedValues[];
 };
 
 function jsonSyncOp<Req, Res>(op: Deno.PluginOp, request: Req): Res {
