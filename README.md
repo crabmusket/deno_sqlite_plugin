@@ -97,6 +97,7 @@ SQLite's [BLOB type](https://www.sqlite.org/datatype3.html) is encoded using bas
 - [ ] Test performance of JSON serialisation for ops and investigate CBOR
 - [ ] Implement more [connection methods](https://docs.rs/rusqlite/0.21.0/rusqlite/struct.Connection.html)?
 - [ ] What are the implications of using `thread_local!` for `CONNECTION_MAP`?
+- [ ] [Embed version](https://stackoverflow.com/a/27841363)
 
 ## Licenses
 
