@@ -70,7 +70,7 @@ A release build will use a few hundred MB of disk space, and a debug build may u
 ## When would I use this?
 
 Use this plugin whenever you would embed an SQLite database into any other program.
-It's essentially just a wrapper around (another wrapper around) the actual SQLite C code.
+It's essentially just a JavaScript wrapper around a Rust wrapper around the actual SQLite C code.
 
 [deno-sqlite](https://github.com/dyedgreen/deno-sqlite), which is awesome, works in browsers; this plugin _does not_.
 This plugin _does_ allow you to work with SQLite databases from the filesystem with all the durability and performance SQLite provides.
