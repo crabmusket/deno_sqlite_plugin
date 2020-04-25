@@ -18,12 +18,12 @@ export class Sqlite {
     if (response.error) {
       throw new Error("[ops.openConnection] error: " + response.error);
     }
-    if (!response.result) {
+    if (response.connection_id === null) {
       throw new Error(
-        "[ops.openConnection] missing result with path: " + path
+        "[ops.openConnection] missing connection id with path: " + path
       );
     }
-    return new Connection(this._plugin, path, response.result.connection_id);
+    return new Connection(this._plugin, path, response.connection_id);
   }
 }
 
@@ -117,9 +117,7 @@ type OpenConnectionRequest = {
 
 type OpenConnectionResponse = {
   error: string | null;
-  result: null | {
-    connection_id: number;
-  };
+  connection_id: number | null,
 };
 
 type ExecuteRequest = {

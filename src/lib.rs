@@ -32,14 +32,9 @@ struct OpOpenConnectionParams {
 }
 
 #[derive(Serialize, Deserialize)]
-struct OpOpenConnectionResult {
-  connection_id: u32,
-}
-
-#[derive(Serialize, Deserialize)]
 struct OpOpenConnectionResponse {
   error: Option<String>,
-  result: Option<OpOpenConnectionResult>,
+  connection_id: Option<u32>,
 }
 
 pub fn op_open_connection(data: &[u8], _zero_copy: Option<ZeroCopyBuf>) -> CoreOp {
@@ -54,9 +49,7 @@ pub fn op_open_connection(data: &[u8], _zero_copy: Option<ZeroCopyBuf>) -> CoreO
   });
   let response = OpOpenConnectionResponse {
     error: None,
-    result: Some(OpOpenConnectionResult {
-      connection_id,
-    }),
+    connection_id: Some(connection_id),
   };
   let result = serde_json::to_vec(&response).unwrap();
   Op::Sync(result.into_boxed_slice())
