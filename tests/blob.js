@@ -1,4 +1,4 @@
-import { init } from "../src/mod.ts";
+import { Sqlite } from "../src/mod.ts";
 
 const filenameBase = "deno_sqlite_plugin";
 
@@ -16,7 +16,7 @@ if (Deno.build.os === "mac") {
 const filename = `./target/${Deno.args[0] ||
   "debug"}/${filenamePrefix}${filenameBase}${filenameSuffix}`;
 
-let sqlite = await init(filename);
+let sqlite = new Sqlite(Deno.openPlugin(filename));
 
 let connection = await sqlite.connect(":memory:");
 await connection.execute(`CREATE TABLE IF NOT EXISTS binaries (
@@ -25,12 +25,14 @@ await connection.execute(`CREATE TABLE IF NOT EXISTS binaries (
   data            BLOB
 )`);
 
+let blob = new Uint32Array(6).fill(8);
+console.log("blob before inserting", blob)
 let rowsAffected = await connection.execute(
   `INSERT INTO binaries (name, data) VALUES (?, ?)`,
-  ["winrar.exe", new Uint32Array(6).fill(8).buffer]
+  ["winrar.exe", blob.buffer]
 );
 console.log("inserted binary,", rowsAffected, "rows affected");
 
 let result = await connection.query(`SELECT * FROM binaries`, []);
 console.log("raw result", result);
-console.log("blob as Uint32Array", new Uint32Array(result[0][1]));
+console.log("blob as Uint32Array", new Uint32Array(result[0][2]));
