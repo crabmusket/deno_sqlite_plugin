@@ -100,6 +100,7 @@ SQLite's [BLOB type](https://www.sqlite.org/datatype3.html) is encoded using bas
 - [ ] [Embed version](https://stackoverflow.com/a/27841363)
 - [ ] Improve [docs](https://doc.deno.land/https/raw.githubusercontent.com/crabmusket/deno_sqlite_plugin/master/src/mod.ts)
 - [x] Replace `macro_use` with `use deno_core::init_fn;`
+- [ ] Use Deno's resource table instead of maintaining a connection map
 - [ ] Tests 😬
 
 ## Licenses
