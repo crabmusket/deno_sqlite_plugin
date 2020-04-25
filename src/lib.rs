@@ -1,4 +1,3 @@
-#[macro_use]
 extern crate deno_core;
 extern crate futures;
 
@@ -25,7 +24,7 @@ fn init(context: &mut dyn PluginInitContext) {
   context.register_op("execute", Box::new(op_execute));
   context.register_op("query", Box::new(op_query));
 }
-init_fn!(init);
+deno_core::init_fn!(init);
 
 #[derive(Serialize, Deserialize)]
 struct OpOpenConnectionParams {

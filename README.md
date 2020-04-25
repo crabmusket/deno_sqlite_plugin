@@ -99,7 +99,7 @@ SQLite's [BLOB type](https://www.sqlite.org/datatype3.html) is encoded using bas
 - [ ] What are the implications of using `thread_local!` for `CONNECTION_MAP`?
 - [ ] [Embed version](https://stackoverflow.com/a/27841363)
 - [ ] Improve [docs](https://doc.deno.land/https/raw.githubusercontent.com/crabmusket/deno_sqlite_plugin/master/src/mod.ts)
-- [ ] Replace `macro_use` with `use deno_core::init_fn;`
+- [x] Replace `macro_use` with `use deno_core::init_fn;`
 - [ ] Tests 😬
 
 ## Licenses
