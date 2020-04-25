@@ -1,6 +1,6 @@
 [package]
 name = "deno_sqlite_plugin"
-version = "0.1.0"
+version = "0.3.0"
 authors = ["Daniel Buckmaster"]
 edition = "2018"
 publish = false
@@ -11,11 +11,11 @@ crate-type = ["cdylib"]
 [dependencies]
 base64 = "0.11.0"
 futures = "0.3.1"
-deno_core = "0.35.0"
-deno = "0.35.0"
+deno_core = "0.41.0"
+deno = "0.41.0"
 serde = "1.0.104"
 serde_json = "1.0.48"
 
 [dependencies.rusqlite]
-version = "0.21.0"
+version = "0.23.1"
 features = ["bundled"]
