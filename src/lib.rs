@@ -1,10 +1,7 @@
-extern crate deno_core;
-extern crate futures;
-
-use deno_core::CoreOp;
-use deno_core::Op;
-use deno_core::PluginInitContext;
-use deno_core::{ZeroCopyBuf};
+use deno_core::plugin_api::Buf;
+use deno_core::plugin_api::Interface;
+use deno_core::plugin_api::Op;
+use deno_core::plugin_api::ZeroCopyBuf;
 
 use rusqlite::{Connection, types::ValueRef, types::Value as SqliteValue};
 
@@ -19,12 +16,12 @@ thread_local! {
   static CONNECTION_MAP: RefCell<HashMap<u32, Connection>> = RefCell::new(HashMap::new());
 }
 
-fn init(context: &mut dyn PluginInitContext) {
-  context.register_op("openConnection", Box::new(op_open_connection));
-  context.register_op("execute", Box::new(op_execute));
-  context.register_op("query", Box::new(op_query));
+#[no_mangle]
+pub fn deno_plugin_init(interface: &mut dyn Interface) {
+  interface.register_op("tag:crabmusket.github.io,2020:sqliteOpenConnection", op_open_connection);
+  interface.register_op("tag:crabmusket.github.io,2020:sqliteExecute", op_execute);
+  interface.register_op("tag:crabmusket.github.io,2020:sqliteQuery", op_query);
 }
-deno_core::init_fn!(init);
 
 #[derive(Serialize, Deserialize)]
 struct OpOpenConnectionParams {
@@ -37,7 +34,11 @@ struct OpOpenConnectionResponse {
   connection_id: Option<u32>,
 }
 
-pub fn op_open_connection(data: &[u8], _zero_copy: Option<ZeroCopyBuf>) -> CoreOp {
+pub fn op_open_connection(
+  _interface: &mut dyn Interface,
+  data: &[u8],
+  _zero_copy: Option<ZeroCopyBuf>,
+) -> Op {
   let params: OpOpenConnectionParams = serde_json::from_slice(data).unwrap();
   let mut connection_id = 0;
   CONNECTION_INDEX.with(|cell| {
@@ -68,7 +69,11 @@ struct OpExecuteResponse {
   rows_affected: usize,
 }
 
-pub fn op_execute(data: &[u8], _zero_copy: Option<ZeroCopyBuf>) -> CoreOp {
+pub fn op_execute(
+  _interface: &mut dyn Interface,
+  data: &[u8],
+  _zero_copy: Option<ZeroCopyBuf>,
+) -> Op {
   let params: OpExecuteParams = serde_json::from_slice(data).unwrap();
   let mut rows_affected: Option<usize> = None;
   CONNECTION_MAP.with(|cell| {
@@ -100,7 +105,11 @@ struct OpQueryResponse {
   result: Vec<Vec<JsonValue>>,
 }
 
-pub fn op_query(data: &[u8], _zero_copy: Option<ZeroCopyBuf>) -> CoreOp {
+pub fn op_query(
+  _interface: &mut dyn Interface,
+  data: &[u8],
+  _zero_copy: Option<ZeroCopyBuf>,
+) -> Op {
   let params: OpQueryParams = serde_json::from_slice(data).unwrap();
   let mut result_rows = Vec::new();
   CONNECTION_MAP.with(|cell| {

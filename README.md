@@ -4,14 +4,14 @@ Bindings to [rusqlite](https://github.com/jgallagher/rusqlite) for [deno](https:
 
 ## Stability
 
-**UNSTABLE** :rotating_light:
+**NOT PRODUCTION READY** :rotating_light:
 
 This plugin **will panic** if anything goes slightly wrong.
 Probably don't use it in production just yet.
 
 **COMPATIBILITY** 🦕
 
-This plugin has been tested against deno v0.40.0
+This plugin has been tested against deno v1.0.0
 
 ## Usage
 
@@ -19,39 +19,62 @@ First, download the compiled plugin (~10MB).
 If you're not using Linux, you will have to compile from source for now (see below).
 
 ```bash
-wget https://github.com/crabmusket/deno_sqlite_plugin/releases/download/v0.2/libdeno_sqlite_plugin.so
+wget https://github.com/crabmusket/deno_sqlite_plugin/releases/download/v0.4/libdeno_sqlite_plugin.so
 ```
 
 Now copy this to `sqlite.ts`:
 
 ```ts
-import { Sqlite } from "https://raw.githubusercontent.com/crabmusket/deno_sqlite_plugin/v0.2/src/mod.ts";
+import { Sqlite } from "https://raw.githubusercontent.com/crabmusket/deno_sqlite_plugin/v0.4/src/mod.ts";
 
-const sqlite = new Sqlite(Deno.openPlugin("./libdeno_sqlite_plugin.so"));
-const db = await sqlite.connect("./db.sqlite3");
-await db.execute("CREATE TABLE IF NOT EXISTS names (name TEXT)");
-await db.execute("INSERT INTO names (name) VALUES (?)", ["ryan dahl"]);
-console.log(
-  await db.query("SELECT name FROM names", [])
+Deno.openPlugin("./libdeno_sqlite_plugin.so");
+
+const sqlite = new Sqlite();
+const db = await sqlite.connect(":memory:");
+
+await db.execute(`
+  CREATE TABLE IF NOT EXISTS podcasts (
+    name TEXT,
+    subject TEXT
+  )
+`);
+
+await db.execute(
+  `
+    INSERT INTO podcasts (name, subject)
+    VALUES (?, ?), (?, ?), (?, ?)
+  `,
+  [
+    ["Econtalk", "economics"],
+    ["Random Shipping Forecast", "shipping"],
+    ["Revolutions", "revolutions"],
+  ].flat(),
 );
+
+console.log(
+  await db.query("SELECT name, subject FROM podcasts", []),
+);
+
 ```
 
 And then run the script:
 
 ```bash
-$ deno --allow-plugin sqlite.ts
-[ [ "ryan dahl" ] ]
+$ deno run --unstable --allow-plugin sqlite.ts
+[
+ [ "Econtalk", "economics" ],
+ [ "Random Shipping Forecast", "shipping" ],
+ [ "Revolutions", "revolutions" ]
+]
 ```
 
 ## Auto-download plugin
 
 You can also import `prepared.ts` to fetch the plugin transparently using [plugin_prepare](https://github.com/manyuanrong/deno-plugin-prepare).
-Replace the top lines of the example above with:
+Replace the top line of the example above with:
 
 ```ts
-import { Sqlite, sqlitePlugin } from "https://raw.githubusercontent.com/crabmusket/deno_sqlite_plugin/v0.2/src/prepared.ts";
-
-const sqlite = new Sqlite(sqlitePlugin);
+import { Sqlite } from "https://raw.githubusercontent.com/crabmusket/deno_sqlite_plugin/v0.4/src/prepared.ts";
 ```
 
 This may be more ergonomic if you want to use Sqlite in a library that others will depend on.
@@ -92,14 +115,12 @@ SQLite's [BLOB type](https://www.sqlite.org/datatype3.html) is encoded using bas
 ## TODO
 
 - [ ] Please don't look at any of my code, it's awful
-- [x] Make JS-side interface slightly nicer? Remove `init`
 - [ ] Remove all uses of `unwrap()` in Rust; pass errors to JS gracefully
 - [ ] Test performance of JSON serialisation for ops and investigate CBOR
 - [ ] Implement more [connection methods](https://docs.rs/rusqlite/0.21.0/rusqlite/struct.Connection.html)?
 - [ ] What are the implications of using `thread_local!` for `CONNECTION_MAP`?
 - [ ] [Embed version](https://stackoverflow.com/a/27841363)
 - [ ] Improve [docs](https://doc.deno.land/https/raw.githubusercontent.com/crabmusket/deno_sqlite_plugin/master/src/mod.ts)
-- [x] Replace `macro_use` with `use deno_core::init_fn;`
 - [ ] Use Deno's resource table instead of maintaining a connection map
 - [ ] Tests 😬
 
