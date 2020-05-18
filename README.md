@@ -1,6 +1,7 @@
 # Deno SQLite plugin
 
-<a href="https://deno.land/x/sqlite_plugin@v0.4"><img src="https://img.shields.io/badge/deno.land%2Fx-v0.4-yellow"></a>
+<a href="https://deno.land/x/sqlite_plugin@v0.4"><img src="https://img.shields.io/badge/deno.land%2Fx-v0.4-yellow" alt="deno.land/x v0.4"></a>
+<a href="https://doc.deno.land/https/deno.land/x/sqlite_plugin/src/mod.ts"><img src="https://doc.deno.land/badge.svg" alt="deno doc"></a>
 
 Bindings to [rusqlite](https://github.com/jgallagher/rusqlite) for [deno](https://deno.land).
 
