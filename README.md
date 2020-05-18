@@ -90,8 +90,16 @@ Install Rust (I recommend [rustup](https://rustup.rs/)) and [deno](https://deno.
 cargo build --release
 ```
 
-This will take some time (30-40 minutes on a laptop) because it compiles all of V8.
-A release build will use a few hundred MB of disk space, and a debug build may use up to 2GB.
+This will take a few minutes.
+A release build will use a few hundred MB of disk space, and a debug build (if you don't specify the `--release` flag) may use up to 600MB.
+
+After you compile, I recommend `strip`ping Linux libraries:
+
+```bash
+strip ./target/release/libdeno_sqlite_plugin.so
+```
+
+This will reduce the filesize from ~10MB to ~2MB.
 
 ## When would I use this?
 
