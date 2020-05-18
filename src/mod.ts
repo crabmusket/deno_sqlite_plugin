@@ -13,13 +13,13 @@ const decoder = new TextDecoder();
  * may depend on how Deno's plugin API evolves.
  */
 export class Sqlite {
-  /** @private */
+  /** @ignore */
   _openConnection: number;
 
-  /** @private */
+  /** @ignore */
   _execute: number;
 
-  /** @private */
+  /** @ignore */
   _query: number;
 
   /** No need to pass any arguments yet. */
@@ -81,11 +81,14 @@ type EncodedValues = Array<EncodedValue>;
 
 /** Represents an open database. */
 export class Connection {
+  /** @ignore */
   _sqlite: Sqlite;
+  /** @ignore */
   _original_path: string;
+  /** @ignore */
   _connection_id: number;
 
-  /** @private */
+  /** @ignore */
   constructor(sqlite: Sqlite, path: string, id: number) {
     this._sqlite = sqlite;
     this._original_path = path;
