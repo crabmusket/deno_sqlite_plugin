@@ -114,6 +114,17 @@ SQLite is [_very good_](https://sqlite.org/testing.html).
 You might not always need a remote database like MySQL or Postgres.
 But if you do, check out [deno_mysql](https://github.com/manyuanrong/deno_mysql) or [deno-postgres](https://github.com/buildondata/deno-postgres).
 
+## Security
+
+There's a lot of discussion about Deno's [security model](https://deno.land/manual/getting_started/permissions) and how it can help application developers.
+
+Be aware that when running with the `--use-plugin` flag which is required in order to use this plugin, all code running inside your script (including 3rd-party code) may call `Deno.openPlugin` and open arbitrary plugins.
+The current plugin API does not seem to respect `--allow-read` whitelisting.
+However, the code cannot download plugins from the internet (unless you allow it to with `--allow-net`), so the application can only load plugins that already exist on your filesystem.
+
+When running, Deno's permissions API does not apply to the plugin code.
+So, for example, even if you don't specify `--allow-write`, this plugin can be used to create SQLite files in arbitrary locations on disk.
+
 ## How does it work?
 
 Query parameters are encoded to JSON text and sent from deno's JS runtime to the plugin.
