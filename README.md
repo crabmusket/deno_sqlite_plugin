@@ -1,4 +1,6 @@
-# deno sqlite plugin :seedling:
+# Deno SQLite plugin
+
+<a href="https://deno.land/x/sqlite_plugin@v0.4"><img src="https://img.shields.io/badge/deno.land%2Fx-v0.4-yellow"></a>
 
 Bindings to [rusqlite](https://github.com/jgallagher/rusqlite) for [deno](https://deno.land).
 
@@ -28,7 +30,7 @@ wget https://github.com/crabmusket/deno_sqlite_plugin/releases/download/v0.4/lib
 Now copy this to `sqlite.ts`:
 
 ```ts
-import { Sqlite } from "https://raw.githubusercontent.com/crabmusket/deno_sqlite_plugin/v0.4/src/mod.ts";
+import { Sqlite } from "https://deno.land/x/sqlite_plugin@v0.4/src/mod.ts";
 
 Deno.openPlugin("./libdeno_sqlite_plugin.so");
 
@@ -77,7 +79,7 @@ You can also import `prepared.ts` to fetch the plugin transparently using [plugi
 Replace the top line of the example above with:
 
 ```ts
-import { Sqlite } from "https://raw.githubusercontent.com/crabmusket/deno_sqlite_plugin/v0.4/src/prepared.ts";
+import { Sqlite } from "https://deno.land/x/sqlite_plugin@v0.4/src/prepared.ts";
 ```
 
 This may be more ergonomic if you want to use Sqlite in a library that others will depend on.
