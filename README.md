@@ -18,7 +18,7 @@ I will endeavour to maintain compatibility as new versions of Deno change its pl
 
 ## Usage
 
-First, download the compiled plugin (~10MB).
+First, download the compiled plugin (~2MB).
 If you're not using Linux, you will have to compile from source for now (see below).
 
 ```bash
