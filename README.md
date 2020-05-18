@@ -11,7 +11,10 @@ Probably don't use it in production just yet.
 
 **COMPATIBILITY** 🦕
 
-This plugin has been tested against deno v1.0.0
+This plugin has been tested against Deno v1.0.0.
+
+However, Deno's plugin API is not yet stable, so minor version changes to Deno may affect this plugin's usability.
+I will endeavour to maintain compatibility as new versions of Deno change its plugin API.
 
 ## Usage
 
@@ -114,6 +117,7 @@ SQLite's [BLOB type](https://www.sqlite.org/datatype3.html) is encoded using bas
 
 ## TODO
 
+- [ ] Add checks/warnings for Deno version within the code, since plugin API may be unstable
 - [ ] Please don't look at any of my code, it's awful
 - [ ] Remove all uses of `unwrap()` in Rust; pass errors to JS gracefully
 - [ ] Test performance of JSON serialisation for ops and investigate CBOR
