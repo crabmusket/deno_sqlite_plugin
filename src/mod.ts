@@ -3,11 +3,26 @@ import { bufferToBase64 } from "./bufferToBase64.js";
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
+/**
+ * This class is intended to be a holder for configuration. At the moment though,
+ * there is no configuration! It's just a factory for Connections.
+ *
+ * This class does store the IDs of the internal ops used by the library, but
+ * that may change in the future. I'm leaving this class as part of the API for
+ * now, but it may be removed at some point if it doesn't become useful. This
+ * may depend on how Deno's plugin API evolves.
+ */
 export class Sqlite {
+  /** @private */
   _openConnection: number;
+
+  /** @private */
   _execute: number;
+
+  /** @private */
   _query: number;
 
+  /** No need to pass any arguments yet. */
   constructor() {
     let ops = (Deno as any).core.ops();
     let tag = "tag:crabmusket.github.io,2020";
@@ -19,42 +34,71 @@ export class Sqlite {
     }
   }
 
+  /**
+   * Open a connection to a database file. Supports the string ":memory:" for
+   * creating temporary in-memory databases. There is no way to save in-memory
+   * databases beyond the lifetime of the process.
+   *
+   * @param path Path (relative to the current working dir) to the database file.
+   * @throws {Error} If the database cannot be opened, an exception will be thrown.
+   */
   async connect(path: string): Promise<Connection> {
     let response = jsonSyncOp<OpenConnectionRequest, OpenConnectionResponse>(
       this._openConnection,
       { path },
     );
     if (response.error) {
-      throw new Error("[ops.openConnection] error: " + response.error);
+      throw new Error(response.error);
     }
     if (response.connection_id === null) {
       throw new Error(
-        "[ops.openConnection] missing connection id with path: " + path,
+        "missing connection id when opening: " + path,
       );
     }
     return new Connection(this, path, response.connection_id);
   }
 }
 
+/**
+ * SQLite knows only a few native types, represented here. All other types (dates,
+ * booleans, etc.) must be encoded as one of these types.
+ * https://www.sqlite.org/datatype3.html
+ */
 export type Value = null | number | string | Blob;
-export type Blob = ArrayBuffer;
+
 export type Values = Array<Value>;
+
+/**
+ * Raw ArrayBuffers are used to transfer binary data. For example, if you have
+ * a typed array like a Uint8Array, you can use `theArray.buffer` to get its
+ * raw data for insertion into SQLite.
+ */
+export type Blob = ArrayBuffer;
 
 type EncodedValue = null | number | string | EncodedBlob;
 type EncodedBlob = ["blob:base64", string];
 type EncodedValues = Array<EncodedValue>;
 
+/** Represents an open database. */
 export class Connection {
   _sqlite: Sqlite;
   _original_path: string;
   _connection_id: number;
 
+  /** @private */
   constructor(sqlite: Sqlite, path: string, id: number) {
     this._sqlite = sqlite;
     this._original_path = path;
     this._connection_id = id;
   }
 
+  /**
+   * Run a sqlite statement. Use ? in the statement string as a placeholder and
+   * pass the values in the second argument.
+   *
+   * @return The number of rows affected by the statement.
+   * @throws {Error} Errors will have a hopefully-helpful message.
+   */
   async execute(statement: string, params: Values = []): Promise<number> {
     let response = jsonSyncOp<ExecuteRequest, ExecuteResponse>(
       this._sqlite._execute,
@@ -65,11 +109,18 @@ export class Connection {
       },
     );
     if (response.error) {
-      throw new Error("[ops.execute] error: " + response.error);
+      throw new Error(response.error);
     }
     return response.rows_affected;
   }
 
+  /**
+   * Perform a query to get data out.
+   *
+   * @return List of resulting rows that mathed the query. Note this is an array
+   *         of arrays.
+   * @throws {Error} Throws if anything goes wrong.
+   */
   async query(statement: string, params: Values = []): Promise<Values[]> {
     let response = jsonSyncOp<QueryRequest, QueryResponse>(
       this._sqlite._query,
@@ -80,7 +131,7 @@ export class Connection {
       },
     );
     if (response.error) {
-      throw new Error("[ops.execute] error: " + response.error);
+      throw new Error(response.error);
     }
     return decodeBlobs(response.result);
   }
