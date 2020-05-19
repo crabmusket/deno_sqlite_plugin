@@ -1,6 +1,6 @@
 [package]
 name = "deno_sqlite_plugin"
-version = "0.4.0"
+version = "0.5.0"
 authors = ["Daniel Buckmaster"]
 edition = "2018"
 publish = false

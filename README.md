@@ -1,6 +1,6 @@
 # Deno SQLite plugin
 
-<a href="https://deno.land/x/sqlite_plugin@v0.4"><img src="https://img.shields.io/badge/deno.land%2Fx-v0.4-yellow" alt="deno.land/x v0.4"></a>
+<a href="https://deno.land/x/sqlite_plugin@v0.5"><img src="https://img.shields.io/badge/deno.land%2Fx-v0.5-yellow" alt="deno.land/x v0.5"></a>
 <a href="https://doc.deno.land/https/deno.land/x/sqlite_plugin/sqlite.ts"><img src="https://doc.deno.land/badge.svg" alt="deno doc"></a>
 
 Bindings to [rusqlite](https://github.com/jgallagher/rusqlite) for [deno](https://deno.land).
@@ -25,13 +25,13 @@ First, download the compiled plugin (~2MB).
 If you're not using Linux, you will have to compile from source for now (see below).
 
 ```bash
-wget https://github.com/crabmusket/deno_sqlite_plugin/releases/download/v0.4/libdeno_sqlite_plugin.so
+wget https://github.com/crabmusket/deno_sqlite_plugin/releases/download/v0.5/libdeno_sqlite_plugin.so
 ```
 
 Now copy this to `podcasts.ts`:
 
 ```ts
-import { Sqlite } from "https://deno.land/x/sqlite_plugin@v0.4/sqlite.ts";
+import { Sqlite } from "https://deno.land/x/sqlite_plugin@v0.5/sqlite.ts";
 
 Deno.openPlugin("./libdeno_sqlite_plugin.so");
 
@@ -80,7 +80,7 @@ You can also import `prepared.ts` to fetch the plugin transparently using [plugi
 Replace the top line of the example above with:
 
 ```ts
-import { Sqlite } from "https://deno.land/x/sqlite_plugin@v0.4/prepared.ts";
+import { Sqlite } from "https://deno.land/x/sqlite_plugin@v0.5/prepared.ts";
 ```
 
 This may be more ergonomic if you want to use Sqlite in a library that others will depend on.
