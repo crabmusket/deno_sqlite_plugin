@@ -8,6 +8,6 @@ const releaseUrl =
 export const sqlitePlugin = await prepare({
   name: "deno_sqlite_plugin",
   urls: {
-    linux: `${releaseUrl}/libdeno_sqlite_plugin.so`,
+    linux: releaseUrl + "/libdeno_sqlite_plugin.so",
   },
 });
