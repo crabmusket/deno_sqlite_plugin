@@ -154,5 +154,5 @@ SQLite's [BLOB type](https://www.sqlite.org/datatype3.html) is encoded using bas
 
 * SQLite is [public domain](https://sqlite.org/copyright.html)
 * rusqlite is [MIT](https://github.com/jgallagher/rusqlite/blob/master/LICENSE)
-* [Buffer to base64](./src/bufferToBase64.js) implementation is [MIT](https://gist.githubusercontent.com/jonleighton/958841/raw/fb05a8632efb75d85d43deb593df04367ce48371/base64ArrayBuffer.js)
+* [Buffer to base64](./_buffer_to_base64.js) implementation is [MIT](https://gist.githubusercontent.com/jonleighton/958841/raw/fb05a8632efb75d85d43deb593df04367ce48371/base64ArrayBuffer.js)
 * This package's code is [MIT](./LICENSE)
