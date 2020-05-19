@@ -1,4 +1,4 @@
-import { bufferToBase64 } from "./bufferToBase64.js";
+import { bufferToBase64 } from "./_buffer_to_base64.js";
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();

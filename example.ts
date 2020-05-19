@@ -1,4 +1,4 @@
-import { Sqlite } from "./src/mod.ts";
+import { Sqlite } from "./sqlite.ts";
 
 Deno.openPlugin("./target/debug/libdeno_sqlite_plugin.so");
 
@@ -12,7 +12,7 @@ await db.execute(`
   )
 `);
 
-await db.execute(
+let rowsInserted = await db.execute(
   `
     INSERT INTO podcasts (name, subject)
     VALUES (?, ?), (?, ?), (?, ?)
@@ -23,7 +23,7 @@ await db.execute(
     ["Revolutions", "revolutions"],
   ].flat(),
 );
+console.log(`inserted ${rowsInserted} rows`);
 
-console.log(
-  await db.query("SELECT name, subject FROM podcasts", []),
-);
+let results = await db.query("SELECT name, subject FROM podcasts", []);
+console.log(results);

@@ -1,7 +1,7 @@
 # Deno SQLite plugin
 
 <a href="https://deno.land/x/sqlite_plugin@v0.4"><img src="https://img.shields.io/badge/deno.land%2Fx-v0.4-yellow" alt="deno.land/x v0.4"></a>
-<a href="https://doc.deno.land/https/deno.land/x/sqlite_plugin/src/mod.ts"><img src="https://doc.deno.land/badge.svg" alt="deno doc"></a>
+<a href="https://doc.deno.land/https/deno.land/x/sqlite_plugin/sqlite.ts"><img src="https://doc.deno.land/badge.svg" alt="deno doc"></a>
 
 Bindings to [rusqlite](https://github.com/jgallagher/rusqlite) for [deno](https://deno.land).
 
@@ -28,10 +28,10 @@ If you're not using Linux, you will have to compile from source for now (see bel
 wget https://github.com/crabmusket/deno_sqlite_plugin/releases/download/v0.4/libdeno_sqlite_plugin.so
 ```
 
-Now copy this to `sqlite.ts`:
+Now copy this to `podcasts.ts`:
 
 ```ts
-import { Sqlite } from "https://deno.land/x/sqlite_plugin@v0.4/src/mod.ts";
+import { Sqlite } from "https://deno.land/x/sqlite_plugin@v0.4/sqlite.ts";
 
 Deno.openPlugin("./libdeno_sqlite_plugin.so");
 
@@ -45,7 +45,7 @@ await db.execute(`
   )
 `);
 
-await db.execute(
+let rowsInserted = await db.execute(
   `
     INSERT INTO podcasts (name, subject)
     VALUES (?, ?), (?, ?), (?, ?)
@@ -56,17 +56,17 @@ await db.execute(
     ["Revolutions", "revolutions"],
   ].flat(),
 );
+console.log(`inserted ${rowsInserted} rows`);
 
-console.log(
-  await db.query("SELECT name, subject FROM podcasts", []),
-);
-
+let results = await db.query("SELECT name, subject FROM podcasts", []);
+console.log(results);
 ```
 
 And then run the script:
 
 ```bash
-$ deno run --unstable --allow-plugin sqlite.ts
+$ deno run --unstable --allow-plugin podcasts.ts
+inserted 3 rows
 [
  [ "Econtalk", "economics" ],
  [ "Random Shipping Forecast", "shipping" ],
@@ -80,7 +80,7 @@ You can also import `prepared.ts` to fetch the plugin transparently using [plugi
 Replace the top line of the example above with:
 
 ```ts
-import { Sqlite } from "https://deno.land/x/sqlite_plugin@v0.4/src/prepared.ts";
+import { Sqlite } from "https://deno.land/x/sqlite_plugin@v0.4/prepared.ts";
 ```
 
 This may be more ergonomic if you want to use Sqlite in a library that others will depend on.
