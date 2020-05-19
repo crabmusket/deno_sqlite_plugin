@@ -21,6 +21,14 @@ I will endeavour to maintain compatibility as new versions of Deno change its pl
 
 ## Usage
 
+You can use this plugin in three ways:
+
+1. Download the compiled plugin yourself
+2. Download the compiled plugin automatically using [plugin_prepare](https://github.com/manyuanrong/deno-plugin-prepare)
+3. Build the plugin from source
+
+### Manual download
+
 First, download the compiled plugin (~2MB).
 If you're not using Linux, you will have to compile from source for now (see below).
 
@@ -74,18 +82,19 @@ inserted 3 rows
 ]
 ```
 
-## Auto-download plugin
+### Auto-downloading plugin
 
 You can also import `prepared.ts` to fetch the plugin transparently using [plugin_prepare](https://github.com/manyuanrong/deno-plugin-prepare).
-Replace the top line of the example above with:
+Replace first line of the example above with:
 
 ```ts
-import { Sqlite } from "https://deno.land/x/sqlite_plugin@v0.5/prepared.ts";
+import { Sqlite } from "https://deno.land/x/sqlite_plugin@v0.5/sqlite.ts";
 ```
 
+And delete the `Deno.openPlugin` line.
 This may be more ergonomic if you want to use Sqlite in a library that others will depend on.
 
-## Build from source
+### Build from source
 
 Install Rust (I recommend [rustup](https://rustup.rs/)) and [deno](https://deno.land/#install) and build with Cargo:
 
