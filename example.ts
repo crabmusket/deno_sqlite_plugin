@@ -12,7 +12,7 @@ await db.execute(`
   )
 `);
 
-let rowsInserted = await db.execute(
+const rowsInserted = await db.execute(
   `
     INSERT INTO podcasts (name, subject)
     VALUES (?, ?), (?, ?), (?, ?)
@@ -25,5 +25,8 @@ let rowsInserted = await db.execute(
 );
 console.log(`inserted ${rowsInserted} rows`);
 
-let results = await db.query("SELECT name, subject FROM podcasts", []);
+const results = await db.query(
+  "SELECT name, subject FROM podcasts WHERE subject = ?",
+  ["shipping"],
+);
 console.log(results);
