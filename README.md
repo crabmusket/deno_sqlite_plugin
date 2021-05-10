@@ -7,7 +7,11 @@ Bindings to [rusqlite](https://github.com/jgallagher/rusqlite) for [deno](https:
 
 ## Stability
 
-**NOT PRODUCTION READY** :rotating_light:
+**UNMAINTAINED** :rotating_light:
+
+This package is unmaintained, but it may serve as a useful learning resource.
+
+**NOT PRODUCTION READY**
 
 This plugin **will panic** if anything goes slightly wrong.
 Probably don't use it in production just yet.
@@ -15,9 +19,7 @@ Probably don't use it in production just yet.
 **COMPATIBILITY** 🦕
 
 This plugin has been tested against Deno v1.0.0.
-
-However, Deno's plugin API is not yet stable, so minor version changes to Deno may affect this plugin's usability.
-I will endeavour to maintain compatibility as new versions of Deno change its plugin API.
+At the time of writing, Deno's plugin API is not yet stable, so minor version changes to Deno may affect this plugin's usability.
 
 ## Usage
 
