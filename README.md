@@ -19,7 +19,7 @@ Probably don't use it in production just yet.
 **COMPATIBILITY** 🦕
 
 This plugin has been tested against Deno v1.0.0.
-At the time of writing, Deno's plugin API is not yet stable, so minor version changes to Deno may affect this plugin's usability.
+It appears that Deno is [removing its plugin API](https://github.com/denoland/deno/pull/11152) in favour of an FFI, possibly in version 1.13, so this plugin will no longer work.
 
 ## Usage
 
