@@ -1,3 +1,5 @@
+# :rotating_light: Use [this](https://github.com/denodrivers/sqlite3) instead
+
 # Deno SQLite plugin
 
 <a href="https://deno.land/x/sqlite_plugin@v0.4"><img src="https://img.shields.io/badge/deno.land%2Fx-v0.4-yellow" alt="deno.land/x v0.4"></a>
@@ -6,10 +8,6 @@
 Bindings to [rusqlite](https://github.com/jgallagher/rusqlite) for [deno](https://deno.land).
 
 ## Stability
-
-**UNMAINTAINED** :rotating_light:
-
-This package is unmaintained, but it may serve as a useful learning resource.
 
 **NOT PRODUCTION READY**
 
